@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Todos</string>
+    <string name="splash_loading">Loading…</string>
+    <string name="signup_title">Sign up</string>
+    <string name="signup_submit_button">Sign up</string>
+    <string name="auth_email_hint">Email</string>
+    <string name="auth_password_hint">Password</string>
+    <string name="auth_confirm_password_hint">Confirm password</string>
+    <string name="signup_already_have_account">I already have an account</string>
+    <string name="login_create_account">Create a new account</string>
+    <string name="login_submit_button">Log in</string>
+    <string name="login_title">Log in</string>
 </resources>

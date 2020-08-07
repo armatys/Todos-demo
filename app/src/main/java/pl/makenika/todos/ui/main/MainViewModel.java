@@ -4,11 +4,14 @@ import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.ViewModel;
 
 import io.reactivex.rxjava3.core.Single;
+import pl.makenika.todos.data.AppPrefs;
 
-class MainViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
+    private final AppPrefs appPrefs;
+
     @ViewModelInject
-    MainViewModel() {
-
+    public MainViewModel(AppPrefs appPrefs) {
+        this.appPrefs = appPrefs;
     }
 
     Single<InitialScreen> loadInitialScreen() {
