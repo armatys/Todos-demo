@@ -15,6 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import pl.makenika.todos.di.qualifier.EncryptedPrefs;
 
 @Module
@@ -23,10 +24,10 @@ public class DataModule {
     @Provides
     @Singleton
     @EncryptedPrefs
-    SharedPreferences provideEncryptedSharedPreferences(Context context) {
+    SharedPreferences provideEncryptedSharedPreferences(@ApplicationContext Context context) {
         try {
             MasterKey masterKey = new MasterKey.Builder(context)
-                    .setUserAuthenticationRequired(true)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                     .build();
             return EncryptedSharedPreferences.create(context, "appPrefs", masterKey,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
