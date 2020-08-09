@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableSource;
-import io.reactivex.rxjava3.core.MaybeSource;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.CompletableSubject;
 import pl.makenika.todos.data.UserRepository;
 import pl.makenika.todos.di.qualifier.IoScheduler;
 import pl.makenika.todos.di.qualifier.MainScheduler;
@@ -25,7 +23,7 @@ public class DashboardViewModel extends ViewModel {
     private CompositeDisposable disposables = new CompositeDisposable();
 
     private BehaviorSubject<Resource<List<Todo>>> todoListResource = BehaviorSubject.createDefault(new Resource.Idle<>());
-    private PublishSubject<LogoutSignal> logoutSubject = PublishSubject.create();
+    private CompletableSubject logoutSubject = CompletableSubject.create();
 
     private final Scheduler ioScheduler;
     private final Scheduler mainScheduler;
@@ -60,7 +58,7 @@ public class DashboardViewModel extends ViewModel {
     }
 
     public Completable getLogoutSignal() {
-        return logoutSubject.flatMapCompletable(x -> Completable.complete());
+        return logoutSubject;
     }
 
     public Observable<Resource<List<Todo>>> getTodoListResource() {
@@ -87,12 +85,9 @@ public class DashboardViewModel extends ViewModel {
                 .subscribeOn(ioScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(() -> {
-                    logoutSubject.onNext(new LogoutSignal());
+                    logoutSubject.onComplete();
                     logoutSubject.onComplete();
                 });
         disposables.add(disposable);
     }
-}
-
-class LogoutSignal {
 }
