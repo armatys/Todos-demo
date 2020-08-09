@@ -1,4 +1,4 @@
-package pl.makenika.todos.di;
+package pl.makenika.todos.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;

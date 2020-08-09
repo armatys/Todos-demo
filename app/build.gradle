@@ -18,6 +18,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField("String", "BASE_URL", "\"https://todos.flexhire.com/\"")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -31,6 +33,7 @@ android {
 
 dependencies {
     def lifecycle_version = "2.2.0"
+    def retrofit_version = "2.9.0"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -59,6 +62,12 @@ dependencies {
     annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation 'com.squareup.moshi:moshi:1.9.3'
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
