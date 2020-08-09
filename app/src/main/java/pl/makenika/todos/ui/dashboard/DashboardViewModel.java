@@ -18,7 +18,7 @@ import pl.makenika.todos.ui.data.Resource;
 
 public class DashboardViewModel extends ViewModel {
     private CompositeDisposable disposables = new CompositeDisposable();
-    private BehaviorSubject<Resource<List<Todo>>> todoListResource = BehaviorSubject.create();
+    private BehaviorSubject<Resource<List<Todo>>> todoListResource = BehaviorSubject.createDefault(new Resource.Idle<>());
 
     private final Scheduler ioScheduler;
     private final Scheduler mainScheduler;
