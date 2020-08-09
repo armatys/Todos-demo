@@ -7,17 +7,18 @@ import org.mockito.MockitoAnnotations;
 
 import io.reactivex.rxjava3.observers.TestObserver;
 import pl.makenika.todos.data.AppPrefs;
+import pl.makenika.todos.data.UserRepository;
 
 public class MainViewModelTest {
     @Mock
-    private AppPrefs appPrefs;
+    private UserRepository userRepository;
 
     private MainViewModel tested;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        tested = new MainViewModel(appPrefs);
+        tested = new MainViewModel(userRepository);
     }
 
     @Test

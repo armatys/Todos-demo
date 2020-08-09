@@ -44,11 +44,15 @@ public class MainFragment extends Fragment {
     private void showInitialScreen(MainViewModel.InitialScreen screen) {
         switch (screen) {
             case AUTH:
-                NavDirections directions = MainFragmentDirections.actionMainFragmentToSignupFragment();
-                Navigation.findNavController(requireView()).navigate(directions);
+                navigateTo(MainFragmentDirections.actionMainFragmentToSignupFragment());
                 break;
             case DASHBOARD:
-                throw new RuntimeException("Not implemented");
+                navigateTo(MainFragmentDirections.actionMainFragmentToDashboardFragment());
+                break;
         }
+    }
+
+    private void navigateTo(NavDirections directions) {
+        Navigation.findNavController(requireView()).navigate(directions);
     }
 }

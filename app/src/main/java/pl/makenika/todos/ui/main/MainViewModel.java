@@ -4,18 +4,26 @@ import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.ViewModel;
 
 import io.reactivex.rxjava3.core.Single;
-import pl.makenika.todos.data.AppPrefs;
+import pl.makenika.todos.data.UserRepository;
 
 public class MainViewModel extends ViewModel {
-    private final AppPrefs appPrefs;
+    private final UserRepository userRepository;
 
     @ViewModelInject
-    public MainViewModel(AppPrefs appPrefs) {
-        this.appPrefs = appPrefs;
+    public MainViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     Single<InitialScreen> loadInitialScreen() {
-        return Single.just(InitialScreen.AUTH);
+        return userRepository
+                .isUserLoggedIn()
+                .map(loggedIn -> {
+                    if (loggedIn) {
+                        return InitialScreen.DASHBOARD;
+                    } else {
+                        return InitialScreen.AUTH;
+                    }
+                });
     }
 
     enum InitialScreen {
