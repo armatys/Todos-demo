@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import com.squareup.moshi.Moshi;
 
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.ResponseBody;
 import pl.makenika.todos.net.AuthService;
@@ -86,6 +88,12 @@ public class UserRepository {
                     boolean isSuccessful = authResponse.authToken != null;
                     return new AuthResult(isSuccessful, authResponse.message);
                 });
+    }
+
+    public Completable logout() {
+        return Completable.fromAction(() -> {
+            appPrefs.setJwt(null);
+        });
     }
 
     private void setAuthToken(@Nullable String token) {

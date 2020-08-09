@@ -5,11 +5,16 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableSource;
+import io.reactivex.rxjava3.core.MaybeSource;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import pl.makenika.todos.data.UserRepository;
 import pl.makenika.todos.di.qualifier.IoScheduler;
 import pl.makenika.todos.di.qualifier.MainScheduler;
 import pl.makenika.todos.net.TodoService;
@@ -18,17 +23,21 @@ import pl.makenika.todos.ui.data.Resource;
 
 public class DashboardViewModel extends ViewModel {
     private CompositeDisposable disposables = new CompositeDisposable();
+
     private BehaviorSubject<Resource<List<Todo>>> todoListResource = BehaviorSubject.createDefault(new Resource.Idle<>());
+    private PublishSubject<LogoutSignal> logoutSubject = PublishSubject.create();
 
     private final Scheduler ioScheduler;
     private final Scheduler mainScheduler;
     private final TodoService todoService;
+    private final UserRepository userRepository;
 
     @ViewModelInject
-    public DashboardViewModel(@IoScheduler Scheduler ioScheduler, @MainScheduler Scheduler mainScheduler, TodoService todoService) {
+    public DashboardViewModel(@IoScheduler Scheduler ioScheduler, @MainScheduler Scheduler mainScheduler, TodoService todoService, UserRepository userRepository) {
         this.ioScheduler = ioScheduler;
         this.mainScheduler = mainScheduler;
         this.todoService = todoService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -50,6 +59,10 @@ public class DashboardViewModel extends ViewModel {
         disposables.add(disposable);
     }
 
+    public Completable getLogoutSignal() {
+        return logoutSubject.flatMapCompletable(x -> Completable.complete());
+    }
+
     public Observable<Resource<List<Todo>>> getTodoListResource() {
         return todoListResource;
     }
@@ -67,4 +80,19 @@ public class DashboardViewModel extends ViewModel {
                 });
         disposables.add(disposable);
     }
+
+    public void logout() {
+        Disposable disposable = userRepository
+                .logout()
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
+                .subscribe(() -> {
+                    logoutSubject.onNext(new LogoutSignal());
+                    logoutSubject.onComplete();
+                });
+        disposables.add(disposable);
+    }
+}
+
+class LogoutSignal {
 }

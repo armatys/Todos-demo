@@ -11,16 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import pl.makenika.todos.R;
 import pl.makenika.todos.net.response.Todo;
 import pl.makenika.todos.ui.data.Resource;
@@ -49,6 +51,14 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        view.<MaterialToolbar>findViewById(R.id.materialToolbar).setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.logout) {
+                viewModel.logout();
+                return true;
+            }
+            return false;
+        });
+
         progressContainer = view.findViewById(R.id.progress_container);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         adapter = new TodoAdapter();
@@ -59,11 +69,15 @@ public class DashboardFragment extends Fragment {
             showNewEntryDialog();
         });
 
-        Disposable disposable = viewModel.getTodoListResource()
+        disposables.add(viewModel
+                .getTodoListResource()
                 .subscribe(this::renderResource, throwable -> {
                     Snackbar.make(view, R.string.generic_error, Snackbar.LENGTH_LONG).show();
-                });
-        disposables.add(disposable);
+                }));
+
+        disposables.add(viewModel
+                .getLogoutSignal()
+                .subscribe(this::onLoggedOut));
 
         viewModel.loadTodoList();
     }
@@ -72,6 +86,11 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         disposables.dispose();
         super.onDestroyView();
+    }
+
+    private void onLoggedOut() {
+        NavDirections directions = DashboardFragmentDirections.actionDashboardFragmentToMainFragment();
+        Navigation.findNavController(requireView()).navigate(directions);
     }
 
     private void renderResource(Resource<List<Todo>> resource) {

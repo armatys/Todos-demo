@@ -16,4 +16,5 @@
     <string name="generic_add">Add</string>
     <string name="generic_cancel">Cancel</string>
     <string name="add_todo_dialog_title">New entry</string>
+    <string name="dashboard_menu_logout">Log out</string>
 </resources>
