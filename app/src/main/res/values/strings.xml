@@ -13,4 +13,7 @@
     <string name="auth_name_hint">Name</string>
     <string name="generic_error">Could not load the resource. Try again later.</string>
     <string name="dashboard_title">Dashboard</string>
+    <string name="generic_add">Add</string>
+    <string name="generic_cancel">Cancel</string>
+    <string name="add_todo_dialog_title">New entry</string>
 </resources>

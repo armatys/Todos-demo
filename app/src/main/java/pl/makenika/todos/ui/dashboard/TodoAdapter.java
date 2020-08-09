@@ -6,16 +6,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import pl.makenika.todos.R;
 import pl.makenika.todos.net.response.Todo;
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
-    private List<Todo> todoList = new ArrayList<>();
+public class TodoAdapter extends ListAdapter<Todo, TodoAdapter.TodoViewHolder> {
+    public TodoAdapter() {
+        super(diffUtilCallback);
+    }
+
+    private final static DiffUtil.ItemCallback<Todo> diffUtilCallback = new DiffUtil.ItemCallback<Todo>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
+            return oldItem.id.equals(newItem.id);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Todo oldItem, @NonNull Todo newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 
     @NonNull
     @Override
@@ -26,18 +39,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
-        final Todo todo = todoList.get(position);
+        final Todo todo = getItem(position);
         holder.titleView.setText(todo.title);
-    }
-
-    @Override
-    public int getItemCount() {
-        return todoList.size();
-    }
-
-    public void setTodos(List<Todo> todos) {
-        todoList = todos;
-        notifyDataSetChanged();
     }
 
     public static class TodoViewHolder extends RecyclerView.ViewHolder {

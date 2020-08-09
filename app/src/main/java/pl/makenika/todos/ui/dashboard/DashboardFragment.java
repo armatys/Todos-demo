@@ -1,9 +1,11 @@
 package pl.makenika.todos.ui.dashboard;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +55,10 @@ public class DashboardFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        view.findViewById(R.id.add_button).setOnClickListener(v -> {
+            showNewEntryDialog();
+        });
+
         Disposable disposable = viewModel.getTodoListResource()
                 .subscribe(this::renderResource, throwable -> {
                     Snackbar.make(view, R.string.generic_error, Snackbar.LENGTH_LONG).show();
@@ -76,9 +82,22 @@ public class DashboardFragment extends Fragment {
         } else if (resource instanceof Resource.Loaded) {
             progressContainer.setVisibility(View.GONE);
             List<Todo> todos = ((Resource.Loaded<List<Todo>>) resource).value;
-            adapter.setTodos(todos);
+            adapter.submitList(todos);
         } else if (resource instanceof Resource.Error) {
             progressContainer.setVisibility(View.GONE);
+            Snackbar.make(progressContainer, R.string.generic_error, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void showNewEntryDialog() {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_new_todo, null);
+        final EditText textInput = view.findViewById(R.id.text_input);
+        new AlertDialog.Builder(getContext())
+                .setView(view)
+                .setPositiveButton(R.string.generic_add, (dialog, which) -> {
+                    viewModel.addNewTodo(textInput.getText().toString());
+                })
+                .setNeutralButton(R.string.generic_cancel, null)
+                .show();
     }
 }

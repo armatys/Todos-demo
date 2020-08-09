@@ -53,4 +53,18 @@ public class DashboardViewModel extends ViewModel {
     public Observable<Resource<List<Todo>>> getTodoListResource() {
         return todoListResource;
     }
+
+    public void addNewTodo(String todoTitle) {
+        if (todoTitle.isEmpty()) {
+            return;
+        }
+        todoListResource.onNext(new Resource.Loading<>());
+        Disposable disposable = todoService.createTodo(todoTitle)
+                .subscribeOn(ioScheduler)
+                .observeOn(mainScheduler)
+                .subscribe(todo -> loadTodoList(), throwable -> {
+                    todoListResource.onNext(new Resource.Error<>(throwable));
+                });
+        disposables.add(disposable);
+    }
 }

@@ -4,6 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Todo {
     @Json(name = "created_at")
@@ -28,5 +29,23 @@ public class Todo {
         this.items = items;
         this.title = title;
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Todo todo = (Todo) o;
+        return createdAt.equals(todo.createdAt) &&
+                createdBy.equals(todo.createdBy) &&
+                id.equals(todo.id) &&
+                items.equals(todo.items) &&
+                title.equals(todo.title) &&
+                updatedAt.equals(todo.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(createdAt, createdBy, id, items, title, updatedAt);
     }
 }
