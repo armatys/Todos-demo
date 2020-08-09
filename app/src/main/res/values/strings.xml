@@ -11,4 +11,6 @@
     <string name="login_submit_button">Log in</string>
     <string name="login_title">Log in</string>
     <string name="auth_name_hint">Name</string>
+    <string name="generic_error">Could not load the resource. Try again later.</string>
+    <string name="dashboard_title">Dashboard</string>
 </resources>

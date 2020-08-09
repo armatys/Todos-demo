@@ -1,6 +1,9 @@
 package pl.makenika.todos.di.module;
 
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
+
+import java.util.Date;
 
 import javax.inject.Singleton;
 
@@ -22,7 +25,9 @@ public class NetworkModule {
     @Provides
     @Singleton
     Moshi provideMoshi() {
-        return new Moshi.Builder().build();
+        return new Moshi.Builder()
+                .add(Date.class, new Rfc3339DateJsonAdapter())
+                .build();
     }
 
     @Provides

@@ -1,4 +1,4 @@
-package pl.makenika.todos.ui;
+package pl.makenika.todos.ui.data;
 
 public abstract class FormStatus {
     public static class Idle extends FormStatus {

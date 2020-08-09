@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import pl.makenika.todos.data.UserRepository;
 import pl.makenika.todos.di.qualifier.IoScheduler;
-import pl.makenika.todos.ui.FormStatus;
+import pl.makenika.todos.ui.data.FormStatus;
 
 public class LoginViewModel extends ViewModel {
     private CompositeDisposable disposables = new CompositeDisposable();

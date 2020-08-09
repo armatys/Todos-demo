@@ -18,7 +18,7 @@ import androidx.transition.TransitionManager;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import pl.makenika.todos.R;
-import pl.makenika.todos.ui.FormStatus;
+import pl.makenika.todos.ui.data.FormStatus;
 
 @AndroidEntryPoint
 public class SignupFragment extends Fragment {

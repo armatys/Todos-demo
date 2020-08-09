@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'com.squareup.moshi:moshi:1.9.3'
+    implementation 'com.squareup.moshi:moshi-adapters:1.9.3'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit_version"
